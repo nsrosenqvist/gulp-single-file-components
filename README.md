@@ -21,26 +21,26 @@ const gulp = require('gulp');
 const components = require('gulp-single-file-components');
 
 gulp.task('components', function() {
-    return gulp.src('components/**/*.vue')
-      .pipe(components())
-      .pipe(gulp.dest('dist/'));
+  return gulp.src('components/**/*.vue')
+    .pipe(components())
+    .pipe(gulp.dest('dist/'));
 });    
 ```
 
 The code above would output the follow vue-file into 3 different files with same name but corresponding extension:
-```php
+```html
 <template>
-	<h1>Template</h1>
+    <h1>Template</h1>
 </template>
 
 <script>
-    console.log('script');
+  console.log('script');
 </script>
 
 <style lang="scss">
-	h1 {
-		font-weight: bold;
-	}
+  h1 {
+    font-weight: bold;
+  }
 </style>
 ```
 
@@ -57,72 +57,72 @@ const indent = require('indent-string');
 const components = require('gulp-single-file-components');
 
 gulp.task('components', function() {
-    return gulp.src('components/**/*.vue')
-      .pipe(components({
-        // We add a php compiler
-        // (this get's passed on to vueify)
-        customCompilers: {
-          php: function (content, cb, compiler, filePath) {
-            content = content.trim();
+  return gulp.src('components/**/*.vue')
+    .pipe(components({
+      // We add a php compiler
+      // (this get's passed on to vueify)
+      customCompilers: {
+        php: function (content, cb, compiler, filePath) {
+          content = content.trim();
 
-            if (content.startsWith('<?php')) {
-              content = content.slice(5);
-            }
-            if (content.startsWith('<?')) {
-              content = content.slice(2);
-            }
-            if (content.endsWith('?>')) {
-              content = content.slice(0, -2);
-            }
+          if (content.startsWith('<?php')) {
+            content = content.slice(5);
+          }
+          if (content.startsWith('<?')) {
+            content = content.slice(2);
+          }
+          if (content.endsWith('?>')) {
+            content = content.slice(0, -2);
+          }
 
-            let result = '<?php \n\n'+deindent(content).trim()+'\n';
-            cb(null, result);
-          },
+          let result = '<?php \n\n'+deindent(content).trim()+'\n';
+          cb(null, result);
         },
-        // We add a custom tag named "config"
-        // (this callback sets the file extension for the custom tag)
-        tags: {
-          config: function (lang, filePath, node) {
-            if (! lang) {
-              return 'ini';
-            }
-            else {
-              return (lang === 'php') ? 'config.'+lang : lang;
-            }
-          },
+      },
+      // We add a custom tag named "config"
+      // (this callback sets the file extension for the custom tag)
+      tags: {
+        config: function (lang, filePath, node) {
+          if (! lang) {
+            return 'ini';
+          }
+          else {
+            return (lang === 'php') ? 'config.'+lang : lang;
+          }
         },
-        // We wrap the default output of the vueify js compiler
-        // with a self executing function
-        outputModifiers: {
-          script: function (content, lang) {
-            return (! lang) ? '(function() { \n'+indent(content, 2)+'\n})();' : content;
-          },
-        }
-      }))
-      .pipe(gulp.dest('dist/');
+      },
+      // We wrap the default output of the vueify js compiler
+      // with a self executing function
+      outputModifiers: {
+        script: function (content, lang) {
+          return (! lang) ? '(function() { \n'+indent(content, 2)+'\n})();' : content;
+        },
+      }
+    }))
+    .pipe(gulp.dest('dist/');
 });    
 ```
 
 Here's an example of what the above modifications would enable. The following vue-file (example.vue):
 
-```php
+```html
 <template lang="blade.php">
-	<h1>{{ $title }}</h1>
+    <h1>{{ $title }}</h1>
 </template>
 
 <script>
-    console.log('script');
+  console.log('script');
 </script>
 
 <style lang="scss">
-    h1 {
-        font-weight: bold;
-    }
+  h1 {
+    font-weight: bold;
+  }
 </style>
 
 <config lang="php">
-	return [
-		'title' => __('Template', 'theme'),
+    return [
+        'title' => __('Template', 'theme'),
     ];
 </config>
 ```
@@ -130,21 +130,21 @@ Here's an example of what the above modifications would enable. The following vu
 Would output the following 4 files:
 
 **example.blade.php**
-```php
+```html
 <h1>{{ $title }}</h1>
 ```
 **example.js**
 ```js
 (function() {
-    "use strict";
+  "use strict";
 
-    console.log('script');
+  console.log('script');
 })();
 ```
 **example.css**
 ```css
 h1 {
-    font-weight: bold;
+  font-weight: bold;
 }
 ```
 **example.config.php**
@@ -152,7 +152,7 @@ h1 {
 <?php
 
 return [
-    'title' => __('Template', 'theme'),
+  'title' => __('Template', 'theme'),
 ];
 ```
 
