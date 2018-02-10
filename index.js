@@ -117,6 +117,9 @@ module.exports = function(args) {
           }));
         });
       }
+      else {
+        callback();
+      }
     });
   });
 
