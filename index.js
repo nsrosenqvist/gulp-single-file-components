@@ -96,7 +96,7 @@ module.exports = function(args) {
       // Process tags
       for (let tag in options.tags) {
         if (result[tag]) {
-          let content = modify(tag, result[tag], languages[tag]);
+          let content = modify(tag, languages[tag], file.path, result[tag], file.base);
           let extension = extensions[tag] || 'txt';
           streams.push(createStream(partialPath+'.'+extension, file.base, new Buffer(content)));
         }
@@ -219,9 +219,9 @@ module.exports = function(args) {
   }
 
   // Allow output from default compilers to be modified
-  function modify(type, content, lang) {
+  function modify(type, lang, filePath, content, base) {
     if (options.outputModifiers.hasOwnProperty(type)) {
-      return options.outputModifiers[type](content, lang);
+      return options.outputModifiers[type](lang, filePath, content, base);
     }
     else {
       return content;
