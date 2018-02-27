@@ -5,7 +5,7 @@ const PLUGIN_DEBUG = false;
 
 // Globals
 var through = require('through2');
-var PluginError = require('gulp-util').PluginError;
+var PluginError = require('plugin-error');
 var path = require('path');
 var vinylSource = require('vinyl-source-stream');
 var strStream = require('string-to-stream');
