@@ -94,7 +94,7 @@ gulp.task('components', function() {
       // We wrap the default output of the vueify js compiler
       // with a self executing function
       outputModifiers: {
-        script: function (content, lang) {
+        script: function (lang, filePath, content, basePath) {
           return (! lang) ? '(function() { \n'+indent(content, 2)+'\n})();' : content;
         },
       }
